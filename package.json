@@ -1,0 +1,13 @@
+{
+  "name": "react-apollo-parcel",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Peter Lee",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {
+    "react": "^16.6.3",
+    "react-apollo": "^2.3.2",
+    "react-dom": "^16.6.3"
+  }
+}
