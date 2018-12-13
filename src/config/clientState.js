@@ -8,7 +8,6 @@ const clientState = {
   resolvers: {
     Mutation: {
       updateNetworkStatus: (_, { isConnected }, { cache }) => {
-        console.log('updateNetworkStatus', isConnected)
         cache.writeData({
           data: {
             networkStatus: {

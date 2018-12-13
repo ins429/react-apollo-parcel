@@ -13,46 +13,50 @@ const App = () => (
         }
       `}
     >
-      {(updateNetworkStatus) => (
+      {updateNetworkStatus => (
         <Query
           query={gql`
-          {
-            rates(currency: "USD") {
-              currency
-              name
-              rate
-            }
+            {
+              rates(currency: "USD") {
+                currency
+                name
+                rate
+              }
 
-            networkStatus @client {
-              isConnected
+              networkStatus @client {
+                isConnected
+              }
             }
-          }
-        `}
-      >
-        {({ data, loading }) =>
-            loading ?
-              <div>loading...</div> :
-              (
-                <div>
-                  <button
-                    onClick={() => updateNetworkStatus({
-                      variables: { isConnected: !data.networkStatus.isConnected }
-                    })}
-                  >
-                    Network is connected? {data.networkStatus.isConnected ? 'yes' : 'no'}
-                  </button>
-                  {
-                    data.rates.map(({ currency, name, rate }) => (
-                      <div key={currency}>
-                        <span>currency: {currency}</span>
-                        <span>name: {name}</span>
-                        <span>rate: {rate}</span>
-                      </div>
-                    ))
+          `}
+        >
+          {({ data, loading }) =>
+            loading ? (
+              <div>loading...</div>
+            ) : (
+              <div>
+                <button
+                  onClick={() =>
+                    updateNetworkStatus({
+                      variables: {
+                        isConnected: !data.networkStatus.isConnected
+                      }
+                    })
                   }
-                </div>
-              )}
-            </Query>
+                >
+                  Network is connected?{' '}
+                  {data.networkStatus.isConnected ? 'yes' : 'no'}
+                </button>
+                {data.rates.map(({ currency, name, rate }) => (
+                  <div key={currency}>
+                    <span>currency: {currency}</span>
+                    <span>name: {name}</span>
+                    <span>rate: {rate}</span>
+                  </div>
+                ))}
+              </div>
+            )
+          }
+        </Query>
       )}
     </Mutation>
   </ApolloProvider>

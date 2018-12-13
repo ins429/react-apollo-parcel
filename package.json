@@ -17,5 +17,8 @@
     "semi": false,
     "singleQuote": true,
     "trailingComma": false
+  },
+  "eslintConfig": {
+    "extends": ["react-app"]
   }
 }
