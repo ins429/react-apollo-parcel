@@ -17,11 +17,12 @@ const App = () => (
         <Query
           query={gql`
             {
-              rates(currency: "USD") {
-                currency
-                name
-                rate
+              obj {
+                id
+                field
               }
+
+              string
 
               networkStatus @client {
                 isConnected
@@ -46,13 +47,11 @@ const App = () => (
                   Network is connected?{' '}
                   {data.networkStatus.isConnected ? 'yes' : 'no'}
                 </button>
-                {data.rates.map(({ currency, name, rate }) => (
-                  <div key={currency}>
-                    <span>currency: {currency}</span>
-                    <span>name: {name}</span>
-                    <span>rate: {rate}</span>
-                  </div>
-                ))}
+                <div>
+                  <span>data.obj.id: {data.obj.id}</span>
+                  <span>data.obj.field: {data.obj.field}</span>
+                  <span>data.string: {data.string}</span>
+                </div>
               </div>
             )
           }
