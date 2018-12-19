@@ -1,17 +1,18 @@
 const clientState = {
   defaults: {
-    networkStatus: {
-      __typename: 'NetworkStatus',
-      isConnected: true
+    localInput: {
+      __typename: 'LocalInput',
+      value: ''
     }
   },
   resolvers: {
     Mutation: {
-      updateNetworkStatus: (_, { isConnected }, { cache }) => {
+      setLocalInput: (_, { value }, { cache }) => {
         cache.writeData({
           data: {
-            networkStatus: {
-              isConnected
+            localInput: {
+              __typename: 'LocalInput',
+              value
             }
           }
         })

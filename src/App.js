@@ -3,61 +3,89 @@ import gql from 'graphql-tag'
 import { Mutation, Query } from 'react-apollo'
 import { ApolloProvider } from 'react-apollo'
 import { client } from './config/apollo'
+import SubmitInputMutation from './components/mutations/SubmitInput'
+import InputChangedSubscription from './components/subscriptions/InputChanged'
 
 const App = () => (
   <ApolloProvider client={client}>
-    <Mutation
-      mutation={gql`
-        mutation updateNetworkStatus($isConnected: Boolean) {
-          updateNetworkStatus(isConnected: $isConnected) @client
+    <Query
+      query={gql`
+        {
+          obj {
+            id
+            field
+          }
+
+          string
+
+          localInput @client {
+            value
+          }
         }
       `}
     >
-      {updateNetworkStatus => (
-        <Query
-          query={gql`
-            {
-              obj {
-                id
-                field
-              }
-
-              string
-
-              networkStatus @client {
-                isConnected
-              }
-            }
-          `}
-        >
-          {({ data, loading }) =>
-            loading ? (
-              <div>loading...</div>
-            ) : (
-              <div>
-                <button
-                  onClick={() =>
-                    updateNetworkStatus({
-                      variables: {
-                        isConnected: !data.networkStatus.isConnected
-                      }
-                    })
-                  }
-                >
-                  Network is connected?{' '}
-                  {data.networkStatus.isConnected ? 'yes' : 'no'}
-                </button>
+      {({ data: { localInput = null, obj = null, string = null }, loading }) =>
+        loading ? (
+          <div>loading...</div>
+        ) : (
+          <div>
+            <div>
+              <h3>Data from query</h3>
+              <span>obj.id: {obj.id}</span>
+              <span>obj.field: {obj.field}</span>
+              <span>string: {string}</span>
+            </div>
+            <SubmitInputMutation>
+              {({ submitInput, data = {} }) => (
                 <div>
-                  <span>data.obj.id: {data.obj.id}</span>
-                  <span>data.obj.field: {data.obj.field}</span>
-                  <span>data.string: {data.string}</span>
+                  <h3>Local input value</h3>
+                  <Mutation
+                    mutation={gql`
+                      mutation setLocalInput($value: String) {
+                        setLocalInput(value: $value) @client
+                      }
+                    `}
+                  >
+                    {setLocalInput => (
+                      <input
+                        type="text"
+                        value={localInput.value}
+                        onChange={({ target: { value } }) =>
+                          setLocalInput({
+                            variables: {
+                              value
+                            }
+                          })
+                        }
+                      />
+                    )}
+                  </Mutation>
+                  <button
+                    onClick={e =>
+                      submitInput({
+                        target: 'top',
+                        value: localInput.value
+                      })
+                    }
+                  >
+                    Submit to remote
+                  </button>
                 </div>
-              </div>
-            )
-          }
-        </Query>
-      )}
-    </Mutation>
+              )}
+            </SubmitInputMutation>
+            <InputChangedSubscription target="top">
+              {({ inputChangedSubscription }) => (
+                <div>
+                  <h3>Remote input value(from subscription)</h3>
+                  {inputChangedSubscription.data &&
+                    inputChangedSubscription.data.inputChanged.value}
+                </div>
+              )}
+            </InputChangedSubscription>
+          </div>
+        )
+      }
+    </Query>
   </ApolloProvider>
 )
 
