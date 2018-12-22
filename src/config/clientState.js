@@ -1,19 +1,36 @@
 const clientState = {
   defaults: {
-    localInput: {
-      __typename: 'LocalInput',
-      value: ''
-    }
+    chatMessages: [],
+    name: '',
+    message: '',
+    channel: 'main'
   },
   resolvers: {
     Mutation: {
-      setLocalInput: (_, { value }, { cache }) => {
+      setName: (_, { name }, { cache }) => {
         cache.writeData({
           data: {
-            localInput: {
-              __typename: 'LocalInput',
-              value
-            }
+            name
+          }
+        })
+
+        return null
+      },
+      setMessage: (_, { message }, { cache }) => {
+        cache.writeData({
+          data: {
+            message
+          }
+        })
+
+        return null
+      },
+      addChatMessage: (_, { message }, { cache }) => {
+        const messages = []
+
+        cache.writeData({
+          data: {
+            messages: [message, ...messages]
           }
         })
 
