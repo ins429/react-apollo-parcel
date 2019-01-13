@@ -1,5 +1,6 @@
 import ApolloClient from 'apollo-client'
 import { ApolloLink } from 'apollo-link'
+import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { BatchHttpLink } from 'apollo-link-batch-http'
 import { hasSubscription } from '@jumpn/utils-graphql'
@@ -32,6 +33,18 @@ const parseBatchResult = new ApolloLink((operation, forward) =>
   }))
 )
 
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('token')
+  console.log('token', token)
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : ''
+    }
+  }
+})
+
 const httpLink = ApolloLink.split(
   operation => hasSubscription(operation.query),
   createAbsintheSocketLink(absintheSocket),
@@ -47,5 +60,10 @@ const stateLink = withClientState({
 
 export const client = new ApolloClient({
   cache,
-  link: ApolloLink.from([stateLink, errorLink, parseBatchResult, httpLink])
+  link: ApolloLink.from([
+    stateLink,
+    errorLink,
+    parseBatchResult,
+    authLink.concat(httpLink)
+  ])
 })

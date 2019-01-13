@@ -1,18 +1,18 @@
 const clientState = {
   defaults: {
-    localInput: {
-      __typename: 'LocalInput',
-      value: ''
+    local: {
+      __typename: 'Local',
+      channel: ''
     }
   },
   resolvers: {
     Mutation: {
-      setLocalInput: (_, { value }, { cache }) => {
+      setChannel: (_, { value }, { cache }) => {
         cache.writeData({
           data: {
-            localInput: {
-              __typename: 'LocalInput',
-              value
+            local: {
+              __typename: 'Local',
+              channel: value
             }
           }
         })
