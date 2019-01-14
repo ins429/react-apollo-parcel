@@ -43,12 +43,18 @@ const App = () => (
                     }
                   />
                   <JoinChannelMutation>
-                    {({ joinChannel, data }) => (
+                    {({ joinChannel, data = {} }) => (
                       <Fragment>
                         <button onClick={() => joinChannel(local.channel)}>
                           join
                         </button>
-                        data: {data}
+                        {data.joinChannel && (
+                          <div>
+                            <p>id: {data.joinChannel.id}</p>
+                            <p>name: {data.joinChannel.name}</p>
+                            <p>name: {data.joinChannel.name}</p>
+                          </div>
+                        )}
                       </Fragment>
                     )}
                   </JoinChannelMutation>

@@ -7,6 +7,13 @@ export const JOIN_CHANNEL = gql`
     joinChannel(channelName: $channelName) {
       id
       name
+      messages {
+        id
+        message
+      }
+      participants {
+        id
+      }
     }
   }
 `
