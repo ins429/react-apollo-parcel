@@ -2,7 +2,8 @@ const clientState = {
   defaults: {
     local: {
       __typename: 'Local',
-      channel: ''
+      channel: '',
+      message: ''
     }
   },
   resolvers: {
@@ -13,6 +14,18 @@ const clientState = {
             local: {
               __typename: 'Local',
               channel: value
+            }
+          }
+        })
+
+        return null
+      },
+      setMessage: (_, { value }, { cache }) => {
+        cache.writeData({
+          data: {
+            local: {
+              __typename: 'Local',
+              message: value
             }
           }
         })

@@ -3,15 +3,15 @@ import gql from 'graphql-tag'
 import { Subscription } from 'react-apollo'
 
 export const MESSAGE_RECEIVED = gql`
-  subscription MessageReceived($channeName: String!) {
-    messageReceived(channeName: $channeName) {
+  subscription MessageReceived($channelName: String!) {
+    messageReceived(channelName: $channelName) {
       id
       message
     }
   }
 `
 
-const MessageReceived = ({ children, channelName, ...props }) => console.log('chan name', channelName) || (
+const MessageReceived = ({ children, channelName, ...props }) => (
   <Subscription subscription={MESSAGE_RECEIVED} variables={{ channelName }}>
     {messageReceived =>
       children ? children({ ...props, messageReceived }) : null
