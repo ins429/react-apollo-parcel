@@ -21,6 +21,10 @@ const SendMessageMutation = ({ children, channel }) => (
             variables: {
               channelName: channel,
               message
+            },
+            optimisticResponse: {
+              ...message,
+              __typename: 'Message'
             }
           })
       })

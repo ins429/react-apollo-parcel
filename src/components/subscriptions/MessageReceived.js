@@ -7,6 +7,10 @@ export const MESSAGE_RECEIVED = gql`
     messageReceived(channelName: $channelName) {
       id
       message
+      createdAt
+      participant {
+        name
+      }
     }
   }
 `

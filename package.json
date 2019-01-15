@@ -4,7 +4,9 @@
   "main": "index.js",
   "author": "Peter Lee",
   "license": "MIT",
-  "devDependencies": {},
+  "devDependencies": {
+    "react-router-dom": "^4.3.1"
+  },
   "dependencies": {
     "@absinthe/socket-apollo-link": "^0.2.0",
     "@jumpn/utils-graphql": "^0.6.0",
