@@ -5,7 +5,8 @@
   "author": "Peter Lee",
   "license": "MIT",
   "devDependencies": {
-    "react-router-dom": "^4.3.1"
+    "react-router-dom": "^4.3.1",
+    "styled-components": "^4.1.3"
   },
   "dependencies": {
     "@absinthe/socket-apollo-link": "^0.2.0",
