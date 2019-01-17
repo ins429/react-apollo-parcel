@@ -60,7 +60,7 @@ const Channel = ({
                     )
                     .map(({ id, message, participant }) => (
                       <p key={id}>
-                        {participant.name}({id}): {message}
+                        {participant && participant.name}({id}): {message}
                       </p>
                     ))}
                   <TouchParticipantOnMount />
@@ -94,29 +94,31 @@ const Channel = ({
                     `}
                   >
                     {setMessage => (
-                      <Fragment>
-                        <input
-                          type="text"
-                          value={local.message}
-                          onChange={({ target: { value } }) =>
-                            setMessage({ variables: { value } })
-                          }
-                        />
-                        <SendMessageMutation channel={channelName}>
-                          {({ sendMessage }) => (
-                            <button
-                              onClick={() => {
-                                sendMessage(local.message)
-                                setMessage({
-                                  variables: { value: '' }
-                                })
+                      <SendMessageMutation channel={channelName}>
+                        {({ sendMessage }) => (
+                          <form
+                            onSubmit={e => {
+                              e.preventDefault()
+
+                              if (!local.message.trim()) return
+
+                              sendMessage(local.message.trim())
+                              setMessage({
+                                variables: { value: '' }
+                              })
+                            }}
+                          >
+                            <input
+                              type="text"
+                              value={local.message}
+                              onChange={({ target: { value } }) => {
+                                setMessage({ variables: { value } })
                               }}
-                            >
-                              send
-                            </button>
-                          )}
-                        </SendMessageMutation>
-                      </Fragment>
+                            />
+                            <button>send</button>
+                          </form>
+                        )}
+                      </SendMessageMutation>
                     )}
                   </Mutation>
                 </div>
