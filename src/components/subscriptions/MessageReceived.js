@@ -1,6 +1,7 @@
 import React from 'react'
 import gql from 'graphql-tag'
 import { Subscription } from 'react-apollo'
+import { Message_participant } from '../Message.fragments'
 
 export const MESSAGE_RECEIVED = gql`
   subscription MessageReceived($channelName: String!) {
@@ -10,9 +11,13 @@ export const MESSAGE_RECEIVED = gql`
       createdAt
       participant {
         name
+
+        ...Message_participant
       }
     }
   }
+
+  ${Message_participant}
 `
 
 const MessageReceived = ({ children, channelName, ...props }) => (

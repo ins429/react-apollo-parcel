@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import styled from 'styled-components'
 import gql from 'graphql-tag'
 import { Mutation, Query } from 'react-apollo'
 import Participant from '../components/Participant'
@@ -11,6 +12,14 @@ import Dialogue from '../components/Dialogue'
 import Loader from '../components/Loader'
 import JoinChannelOnMount from '../components/JoinChannelOnMount'
 import MessageForm from '../components/MessageForm'
+import { withLayout } from '../components/Layout'
+import { Message_participant } from '../components/Message.fragments'
+
+const Container = styled.div`
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+`
 
 const Channel = ({
   match: {
@@ -31,6 +40,8 @@ const Channel = ({
 
                 participant {
                   name
+
+                  ...Message_participant
                 }
               }
             }
@@ -39,6 +50,8 @@ const Channel = ({
               message
             }
           }
+
+          ${Message_participant}
         `}
         variables={{ channelName }}
         pollInterval={5000}
@@ -47,12 +60,36 @@ const Channel = ({
           loading ? (
             <Loader />
           ) : (
-            <Fragment>
-              <Participant />
-              <Dialogue messages={channel.messages} />
-              <TouchParticipantOnMount />
-              <MessageReceivedSubscription channelName={channelName} />
+            <Container>
+              <Query
+                query={gql`
+                  {
+                    participant {
+                      id
+                      name
+                      lastActiveAt
+                    }
+                  }
+                `}
+              >
+                {({ data: { participant }, loading }) =>
+                  loading ? (
+                    <Loader />
+                  ) : (
+                    <Fragment>
+                      <Participant participant={participant} />
+                      <Dialogue
+                        messages={channel.messages}
+                        currentParticipant={participant}
+                      />
+                    </Fragment>
+                  )
+                }
+              </Query>
               <MessageForm channelName={channelName} message={local.message} />
+
+              <MessageReceivedSubscription channelName={channelName} />
+              <TouchParticipantOnMount />
               <CallOnMount
                 fn={() =>
                   subscribeToMore({
@@ -74,7 +111,7 @@ const Channel = ({
                   })
                 }
               />
-            </Fragment>
+            </Container>
           )
         }
       </Query>
@@ -82,4 +119,4 @@ const Channel = ({
   </JoinChannelOnMount>
 )
 
-export default Channel
+export default withLayout(Channel)
