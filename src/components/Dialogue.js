@@ -4,7 +4,6 @@ import Message from './Message'
 
 const Container = styled.div`
   padding: 3px;
-  overflow-y: scroll;
 `
 
 const Dialogue = ({ messages, currentParticipant }) => (
