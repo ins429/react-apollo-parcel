@@ -22,6 +22,7 @@ const MessageBubble = styled.p`
 `
 
 const MessageBox = styled.div``
+
 const Name = styled.label`
   font-size: 0.8rem;
   padding: 0.25rem;

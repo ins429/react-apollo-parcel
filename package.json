@@ -5,6 +5,11 @@
   "author": "Peter Lee",
   "license": "MIT",
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1"
   },
   "dependencies": {
     "@absinthe/socket-apollo-link": "^0.2.0",
@@ -40,5 +45,8 @@
     "extends": [
       "react-app"
     ]
-  }
+  },
+  "browserslist": [
+    "since 2017-06"
+  ]
 }

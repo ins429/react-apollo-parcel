@@ -29,6 +29,10 @@ const Button = styled.button`
   background: none;
 `
 
+const IconWrapper = styled.div`
+  min-width: 2rem;
+`
+
 const MessageForm = ({ channelName, message }) => (
   <Mutation
     mutation={gql`
@@ -60,8 +64,9 @@ const MessageForm = ({ channelName, message }) => (
               }}
             />
             <Button>
-              <SendIcon />
-              Send
+              <IconWrapper>
+                <SendIcon />
+              </IconWrapper>
             </Button>
           </Form>
         )}

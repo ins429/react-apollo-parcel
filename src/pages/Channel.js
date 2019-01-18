@@ -17,8 +17,7 @@ import { Message_participant } from '../components/Message.fragments'
 
 const Container = styled.div`
   display: grid;
-  grid-template-rows: auto 1fr auto;
-  height: 100%;
+  grid-template-rows: 1fr auto 1fr;
 `
 
 const Channel = ({
