@@ -9,10 +9,11 @@ const Container = styled.div`
 const Dialogue = ({ messages, currentParticipant }) => (
   <Container>
     {messages
-      .sort((a, b) =>
-        new Date(a.createdAt).getTime() > new Date(b.createdAt).getTime()
-          ? 1
-          : -1
+      .sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() > new Date(b.createdAt).getTime()
+            ? 1
+            : -1
       )
       .map(({ id, participant: p, ...messageProps }) => (
         <Message

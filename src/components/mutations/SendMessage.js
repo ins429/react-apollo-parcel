@@ -23,8 +23,11 @@ const SendMessageMutation = ({ children, channel }) => (
               message
             },
             optimisticResponse: {
-              ...message,
-              __typename: 'Message'
+              sendMessage: {
+                __typename: 'Message',
+                id: 'temp',
+                message
+              }
             }
           })
       })
