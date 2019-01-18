@@ -1,13 +1,16 @@
 import React, { Component, Fragment, createRef } from 'react'
 
 class PhotoBooth extends Component {
-  state = { error: false, streaming: false, height: 0, width: 320 }
+  state = { error: false, streaming: false, height: 0, width: 320, src: '' }
   video = createRef()
   canvas = createRef()
+  photo = createRef()
 
   async componentDidMount() {
+    let stream
+
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
+      stream = await navigator.mediaDevices.getUserMedia({
         video: true,
         audio: false
       })
@@ -16,60 +19,67 @@ class PhotoBooth extends Component {
       this.setState({ error: true })
     }
 
-    if (typeof stream !== 'undefined') {
-      this.video.srcObject = stream
-      this.video.play()
+    if (stream !== undefined) {
+      this.video.current.srcObject = stream
+      this.video.current.play()
+      this.addEventListener()
     }
   }
 
-  takepicture() {
-    const { canvas, video } = this
+  takePicture() {
+    const { canvas, photo, video, clearPhoto } = this
     const { width, height } = this.state
+    const { onPictureReady } = this.props
 
     if (width && height) {
-      const context = canvas.getContext('2d')
-      const data = canvas.toDataURL('image/png')
+      const context = canvas.current.getContext('2d')
 
-      canvas.width = width
-      canvas.height = height
+      canvas.current.width = width
+      canvas.current.height = height
 
-      context.drawImage(video, 0, 0, width, height)
+      context.drawImage(video.current, 0, 0, width, height)
 
-      this.photo.setAttribute('src', data)
+      const data = canvas.current.toDataURL('image/png')
+
+      this.setState({ src: data })
+      onPictureReady({ data })
     } else {
-      clearphoto()
+      this.clearPhoto()
     }
   }
 
-  clearphoto() {
-    const { canvas } = this
-    const context = canvas.getContext('2d')
-    const data = canvas.toDataURL('image/png')
+  clearPhoto() {
+    const { canvas, photo } = this
+
+    const context = canvas.current.getContext('2d')
+    const data = canvas.current.toDataURL('image/png')
 
     context.fillStyle = '#AAA'
-    context.fillRect(0, 0, canvas.width, canvas.height)
+    context.fillRect(0, 0, canvas.current.width, canvas.current.height)
 
-    this.photo.setAttribute('src', data)
+    this.setState({ src: data })
   }
 
   addEventListener() {
-    const { onFlash } = this.props
-    this.video.addEventListener(
+    const { video, setState } = this
+    const { width, streaming } = this.state
+
+    video.current.addEventListener(
       'canplay',
       e => {
         if (!streaming) {
-          const { canvas, video } = this
-          const { width } = this.state
-          const height = video.videoHeight / (video.videoWidth / width)
+          const height =
+            video.current.videoHeight / (video.current.videoWidth / width)
 
-          this.canvas.setAttribute('width', width)
-          this.canvas.setAttribute('height', height)
-          this.video.setAttribute('width', width)
-          this.video.setAttribute('height', height)
-
-          this.setState({ streaming: true, height })
+          this.setState(() => ({
+            canvasH: height,
+            canvasW: width,
+            videoH: height,
+            videoW: width,
+            streaming: true,
+            height
+          }))
         }
-        onFlash(e)
       },
       false
     )
@@ -77,7 +87,7 @@ class PhotoBooth extends Component {
 
   render() {
     return (
-      <div ref={this.video}>
+      <div ref={this.video.current}>
         {this.state.error ? (
           <p>camera not found</p>
         ) : (
@@ -86,9 +96,10 @@ class PhotoBooth extends Component {
             <canvas ref={this.canvas} />
             <img
               ref={this.photo}
+              src={this.state.src}
               alt="The screen capture will appear in this box."
             />
-            <button id="startbutton">Take photo</button>
+            <button onClick={this.takePicture.bind(this)}>Take photo</button>
           </Fragment>
         )}
       </div>

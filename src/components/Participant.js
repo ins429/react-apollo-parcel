@@ -25,19 +25,23 @@ const Input = styled.input`
   outline: none;
 `
 
-const Participant = ({ participant }) => (
-  <Container>
-    <Label>your name</Label>
-    <SetParticipantNameMutation participant={participant}>
-      {({ setParticipantName }) => (
-        <Input
-          type="text"
-          value={participant.name}
-          onChange={({ target: { value } }) => setParticipantName(value)}
-        />
+const Participant = ({ participant }) =>
+  console.log(participant) || (
+    <Container>
+      <Label>your name</Label>
+      {participant.avatar && (
+        <img src={participant.avatar} alt={participant.name} />
       )}
-    </SetParticipantNameMutation>
-  </Container>
-)
+      <SetParticipantNameMutation participant={participant}>
+        {({ setParticipantName }) => (
+          <Input
+            type="text"
+            value={participant.name}
+            onChange={({ target: { value } }) => setParticipantName(value)}
+          />
+        )}
+      </SetParticipantNameMutation>
+    </Container>
+  )
 
 export default Participant

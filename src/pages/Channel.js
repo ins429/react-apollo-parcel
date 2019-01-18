@@ -66,6 +66,7 @@ const Channel = ({
                     participant {
                       id
                       name
+                      avatar
                       lastActiveAt
                     }
                   }

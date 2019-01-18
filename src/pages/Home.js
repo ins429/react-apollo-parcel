@@ -4,8 +4,10 @@ import styled from 'styled-components'
 import { Mutation, Query } from 'react-apollo'
 import { Link } from 'react-router-dom'
 import TouchParticipantOnMount from '../components/TouchParticipantOnMount'
+import SetParticipantAvatarMutation from '../components/mutations/SetParticipantAvatar'
 import PhotoBooth from '../components/PhotoBooth'
 import Participant from '../components/Participant'
+import { Participant_participant } from '../components/Participant.fragments'
 
 const ChannelForm = styled.form``
 
@@ -19,17 +21,20 @@ const Input = styled.input`
 const Home = () => (
   <Query
     query={gql`
-      {
+      query QueryParticipant {
         participant {
           id
           name
+          avatar
           lastActiveAt
+          ...Participant_participant
         }
 
         local @client {
           channel
         }
       }
+      ${Participant_participant}
     `}
   >
     {({ data: { local, participant }, loading }) =>
@@ -38,7 +43,15 @@ const Home = () => (
       ) : (
         <div>
           <Participant participant={participant} />
-          <PhotoBooth onFlash={() => console.log('flash')} />
+          <SetParticipantAvatarMutation participant={participant}>
+            {({ setParticipantAvatar }) => (
+              <PhotoBooth
+                onPictureReady={({ data }) =>
+                  data && setParticipantAvatar(data)
+                }
+              />
+            )}
+          </SetParticipantAvatarMutation>
           <TouchParticipantOnMount />
           <Mutation
             mutation={gql`
