@@ -9,6 +9,7 @@ const BubbleContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 `
 
 const Avatar = ({ children, color = '#eee', size = '2rem' }) => (

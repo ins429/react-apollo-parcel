@@ -33,11 +33,12 @@ const Name = styled.label`
 
 const Img = styled.img`
   width: 100%;
+  height: 100%;
 `
 
 const Message = ({ message, participant, self }) => (
   <Container self={self}>
-    <Avatar size="5rem">
+    <Avatar size="3rem">
       {participant.avatar ? (
         <Img src={participant.avatar} alt={participant.name} />
       ) : (

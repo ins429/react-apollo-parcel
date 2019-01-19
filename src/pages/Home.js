@@ -69,7 +69,7 @@ const Home = () => (
                     setChannel({ variables: { value } })
                   }
                 />
-                <Link to={`/${local.channel}`}>join</Link>
+                <Link to={`/${local.channel.trim()}`}>join</Link>
               </ChannelForm>
             )}
           </Mutation>
