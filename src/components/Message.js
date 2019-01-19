@@ -19,6 +19,7 @@ const MessageBubble = styled.p`
   border: 1px solid #333;
   border-color: #ccc;
   border-radius: 1rem;
+  text-align: ${({ self }) => (self ? 'right' : 'left')};
 `
 
 const MessageBox = styled.div``

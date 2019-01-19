@@ -1,12 +1,27 @@
 import React, { Component, Fragment, createRef } from 'react'
 import styled from 'styled-components'
 
+const Container = styled.div`
+  padding: 0.5rem;
+`
+
 const DisplayContainer = styled.div`
   position: relative;
 `
 
 const PreviewContainer = styled.div`
   position: relative;
+`
+
+const CamNotFound = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 1rem;
+  border: 1px dotted #333;
 `
 
 const Cam = styled.video`
@@ -104,9 +119,9 @@ class PhotoBooth extends Component {
 
   render() {
     return (
-      <div ref={this.video.current}>
+      <Container>
         {this.state.error ? (
-          <p>camera not found</p>
+          <CamNotFound>camera not found</CamNotFound>
         ) : (
           <Fragment>
             <DisplayContainer>
@@ -127,7 +142,7 @@ class PhotoBooth extends Component {
             )}
           </Fragment>
         )}
-      </div>
+      </Container>
     )
   }
 }

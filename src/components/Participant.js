@@ -10,6 +10,7 @@ import Avatar from './Avatar'
 const Container = styled.div`
   padding: 0.5rem;
   margin: 0 auto;
+  min-width: 280px;
 `
 
 const Label = styled.div`
@@ -23,6 +24,8 @@ const Input = styled.input`
   padding: 0.5rem;
   border-radius: 1rem;
   border: 1px solid #ccc;
+  width: 100%;
+  text-align: center;
   outline: none;
 `
 

@@ -9,13 +9,38 @@ import PhotoBooth from '../components/PhotoBooth'
 import Participant from '../components/Participant'
 import { Participant_participant } from '../components/Participant.fragments'
 
-const ChannelForm = styled.form``
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+const ChannelForm = styled.form`
+  padding: 0.5rem;
+`
 
 const Input = styled.input`
-  padding: 0.5rem;
   border-radius: 1rem;
   border: 1px solid #ccc;
   outline: none;
+  padding: 0.5rem;
+`
+
+const Button = styled.button`
+  border: none;
+  background: #000;
+  display: block;
+  margin: 0.5rem auto;
+  padding: 0.25rem 0.5rem;
+  border-radius: 2rem;
+
+  a {
+    color: #fff;
+    text-decoration: none;
+    &:active {
+      color: #fff;
+    }
+  }
 `
 
 const Home = () => (
@@ -41,7 +66,7 @@ const Home = () => (
       loading ? (
         <div>loading...</div>
       ) : (
-        <div>
+        <Container>
           <Participant participant={participant} />
           <SetParticipantAvatarMutation participant={participant}>
             {({ setParticipantAvatar }) => (
@@ -69,11 +94,13 @@ const Home = () => (
                     setChannel({ variables: { value } })
                   }
                 />
-                <Link to={`/${local.channel.trim()}`}>join</Link>
+                <Button>
+                  <Link to={`/${local.channel.trim()}`}>join</Link>
+                </Button>
               </ChannelForm>
             )}
           </Mutation>
-        </div>
+        </Container>
       )
     }
   </Query>
