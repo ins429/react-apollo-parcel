@@ -1,10 +1,27 @@
 import React, { Component, Fragment, createRef } from 'react'
+import styled from 'styled-components'
+
+const DisplayContainer = styled.div`
+  position: relative;
+`
+
+const PreviewContainer = styled.div`
+  position: relative;
+`
+
+const Cam = styled.video`
+  width: ${({ width }) => width};
+  ${({ hide }) => hide && 'display: none'};
+`
+
+const Canvas = styled.canvas`
+  ${({ hide }) => hide && 'display: none'};
+`
 
 class PhotoBooth extends Component {
   state = { error: false, streaming: false, height: 0, width: 320, src: '' }
   video = createRef()
   canvas = createRef()
-  photo = createRef()
 
   async componentDidMount() {
     let stream
@@ -27,7 +44,7 @@ class PhotoBooth extends Component {
   }
 
   takePicture() {
-    const { canvas, photo, video, clearPhoto } = this
+    const { canvas, video, clearPhoto } = this
     const { width, height } = this.state
     const { onPictureReady } = this.props
 
@@ -49,7 +66,7 @@ class PhotoBooth extends Component {
   }
 
   clearPhoto() {
-    const { canvas, photo } = this
+    const { canvas } = this
 
     const context = canvas.current.getContext('2d')
     const data = canvas.current.toDataURL('image/png')
@@ -57,7 +74,7 @@ class PhotoBooth extends Component {
     context.fillStyle = '#AAA'
     context.fillRect(0, 0, canvas.current.width, canvas.current.height)
 
-    this.setState({ src: data })
+    this.setState({ src: '' })
   }
 
   addEventListener() {
@@ -92,14 +109,22 @@ class PhotoBooth extends Component {
           <p>camera not found</p>
         ) : (
           <Fragment>
-            <video ref={this.video}>Video stream not available.</video>
-            <canvas ref={this.canvas} />
-            <img
-              ref={this.photo}
-              src={this.state.src}
-              alt="The screen capture will appear in this box."
-            />
-            <button onClick={this.takePicture.bind(this)}>Take photo</button>
+            <DisplayContainer>
+              <Cam
+                width={this.state.width}
+                ref={this.video}
+                hide={!!this.state.src}
+              >
+                Video stream not available.
+              </Cam>
+              <Canvas ref={this.canvas} hide={!this.state.src} />
+            </DisplayContainer>
+
+            {this.state.src ? (
+              <button onClick={this.clearPhoto.bind(this)}>Retake</button>
+            ) : (
+              <button onClick={this.takePicture.bind(this)}>Take photo</button>
+            )}
           </Fragment>
         )}
       </div>

@@ -5,6 +5,7 @@ import { Query } from 'react-apollo'
 import { Link } from 'react-router-dom'
 import SetParticipantNameMutation from './mutations/SetParticipantName'
 import Loader from './Loader'
+import Avatar from './Avatar'
 
 const Container = styled.div`
   padding: 0.5rem;
@@ -25,23 +26,28 @@ const Input = styled.input`
   outline: none;
 `
 
-const Participant = ({ participant }) =>
-  console.log(participant) || (
-    <Container>
-      <Label>your name</Label>
-      {participant.avatar && (
-        <img src={participant.avatar} alt={participant.name} />
+const Img = styled.img`
+  width: 100%;
+`
+
+const Participant = ({ participant }) => (
+  <Container>
+    <Label>your name</Label>
+    {participant.avatar && (
+      <Avatar size="6rem">
+        <Img src={participant.avatar} alt={participant.name} />
+      </Avatar>
+    )}
+    <SetParticipantNameMutation participant={participant}>
+      {({ setParticipantName }) => (
+        <Input
+          type="text"
+          value={participant.name}
+          onChange={({ target: { value } }) => setParticipantName(value)}
+        />
       )}
-      <SetParticipantNameMutation participant={participant}>
-        {({ setParticipantName }) => (
-          <Input
-            type="text"
-            value={participant.name}
-            onChange={({ target: { value } }) => setParticipantName(value)}
-          />
-        )}
-      </SetParticipantNameMutation>
-    </Container>
-  )
+    </SetParticipantNameMutation>
+  </Container>
+)
 
 export default Participant

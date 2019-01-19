@@ -31,9 +31,19 @@ const Name = styled.label`
   color: #aaa;
 `
 
+const Img = styled.img`
+  width: 100%;
+`
+
 const Message = ({ message, participant, self }) => (
   <Container self={self}>
-    <Avatar>{participant.name[0] || '?'}</Avatar>
+    <Avatar size="5rem">
+      {participant.avatar ? (
+        <Img src={participant.avatar} alt={participant.name} />
+      ) : (
+        participant.name[0] || '?'
+      )}
+    </Avatar>
     <MessageBox>
       <Name>{participant.name}</Name>
       <MessageBubble self={self}>{message}</MessageBubble>

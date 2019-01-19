@@ -11,8 +11,6 @@ const BubbleContainer = styled.div`
   justify-content: center;
 `
 
-const Wrapper = styled.div``
-
 const Avatar = ({ children, color = '#eee', size = '2rem' }) => (
   <BubbleContainer size={size} color={color}>
     {children}
