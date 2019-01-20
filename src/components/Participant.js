@@ -7,6 +7,10 @@ import SetParticipantNameMutation from './mutations/SetParticipantName'
 import Loader from './Loader'
 import Avatar from './Avatar'
 
+const StyledAvatar = styled(Avatar)`
+  margin: 0 auto;
+`
+
 const Container = styled.div`
   padding: 0.5rem;
   margin: 0 auto;
@@ -37,9 +41,9 @@ const Participant = ({ participant }) => (
   <Container>
     <Label>your name</Label>
     {participant.avatar && (
-      <Avatar size="6rem">
+      <StyledAvatar size="6rem">
         <Img src={participant.avatar} alt={participant.name} />
-      </Avatar>
+      </StyledAvatar>
     )}
     <SetParticipantNameMutation participant={participant}>
       {({ setParticipantName }) => (

@@ -12,8 +12,8 @@ const BubbleContainer = styled.div`
   overflow: hidden;
 `
 
-const Avatar = ({ children, color = '#eee', size = '2rem' }) => (
-  <BubbleContainer size={size} color={color}>
+const Avatar = ({ children, className, color = '#eee', size = '2rem' }) => (
+  <BubbleContainer size={size} color={color} className={className}>
     {children}
   </BubbleContainer>
 )

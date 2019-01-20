@@ -1,5 +1,6 @@
-import React, { Component, Fragment, createRef } from 'react'
+import React, { Component, createRef } from 'react'
 import styled from 'styled-components'
+import Loader from './Loader'
 
 const Container = styled.div`
   padding: 0.5rem;
@@ -11,6 +12,23 @@ const DisplayContainer = styled.div`
 
 const PreviewContainer = styled.div`
   position: relative;
+`
+
+const ButtonContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  z-index: 1rem;
+  width: 100%;
+
+  > button {
+    display: block;
+    margin: 0 auto;
+    background: none;
+    color: #fff;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 1rem;
+  }
 `
 
 const CamNotFound = styled.div`
@@ -34,7 +52,14 @@ const Canvas = styled.canvas`
 `
 
 class PhotoBooth extends Component {
-  state = { error: false, streaming: false, height: 0, width: 320, src: '' }
+  state = {
+    loading: true,
+    error: false,
+    streaming: false,
+    height: 0,
+    width: 320,
+    src: ''
+  }
   video = createRef()
   canvas = createRef()
 
@@ -51,6 +76,7 @@ class PhotoBooth extends Component {
       this.setState({ error: true })
     }
 
+    this.setState({ loading: false })
     if (stream !== undefined) {
       this.video.current.srcObject = stream
       this.video.current.play()
@@ -120,27 +146,30 @@ class PhotoBooth extends Component {
   render() {
     return (
       <Container>
-        {this.state.error ? (
+        {this.state.loading ? (
+          <Loader />
+        ) : this.state.error ? (
           <CamNotFound>camera not found</CamNotFound>
         ) : (
-          <Fragment>
-            <DisplayContainer>
-              <Cam
-                width={this.state.width}
-                ref={this.video}
-                hide={!!this.state.src}
-              >
-                Video stream not available.
-              </Cam>
-              <Canvas ref={this.canvas} hide={!this.state.src} />
-            </DisplayContainer>
-
-            {this.state.src ? (
-              <button onClick={this.clearPhoto.bind(this)}>Retake</button>
-            ) : (
-              <button onClick={this.takePicture.bind(this)}>Take photo</button>
-            )}
-          </Fragment>
+          <DisplayContainer>
+            <Cam
+              width={this.state.width}
+              ref={this.video}
+              hide={!!this.state.src}
+            >
+              Video stream not available.
+            </Cam>
+            <Canvas ref={this.canvas} hide={!this.state.src} />
+            <ButtonContainer>
+              {this.state.src ? (
+                <button onClick={this.clearPhoto.bind(this)}>Retake</button>
+              ) : (
+                <button onClick={this.takePicture.bind(this)}>
+                  Take photo
+                </button>
+              )}
+            </ButtonContainer>
+          </DisplayContainer>
         )}
       </Container>
     )
