@@ -4,8 +4,6 @@ import styled from 'styled-components'
 import { Mutation, Query } from 'react-apollo'
 import { Link } from 'react-router-dom'
 import TouchParticipantOnMount from '../components/TouchParticipantOnMount'
-import SetParticipantAvatarMutation from '../components/mutations/SetParticipantAvatar'
-import PhotoBooth from '../components/PhotoBooth'
 import Participant from '../components/Participant'
 import { Participant_participant } from '../components/Participant.fragments'
 
@@ -68,15 +66,6 @@ const Home = () => (
       ) : (
         <Container>
           <Participant participant={participant} />
-          <SetParticipantAvatarMutation participant={participant}>
-            {({ setParticipantAvatar }) => (
-              <PhotoBooth
-                onPictureReady={({ data }) =>
-                  data && setParticipantAvatar(data)
-                }
-              />
-            )}
-          </SetParticipantAvatarMutation>
           <TouchParticipantOnMount />
           <Mutation
             mutation={gql`
