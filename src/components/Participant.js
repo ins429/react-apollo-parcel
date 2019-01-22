@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
@@ -8,11 +8,6 @@ import Avatar from './Avatar'
 import PhotoBooth from './PhotoBooth'
 import SetParticipantNameMutation from './mutations/SetParticipantName'
 import SetParticipantAvatarMutation from './mutations/SetParticipantAvatar'
-
-const StyledAvatar = styled(Avatar)`
-  position: relative;
-  margin: 0 auto;
-`
 
 const EditButton = styled.button`
   position: absolute;
@@ -25,6 +20,23 @@ const EditButton = styled.button`
   padding: 0.5rem;
   border: 1px solid #fff;
   border-radius: 1rem;
+`
+
+const StyledAvatar = styled(Avatar)`
+  position: relative;
+  margin: 0.25rem auto 1rem;
+
+  &:hover {
+    color: #eee;
+  }
+
+  ${EditButton} {
+    display: none;
+  }
+
+  &:hover ${EditButton} {
+    display: block;
+  }
 `
 
 const Container = styled.div`
@@ -59,29 +71,31 @@ const Participant = ({ participant }) => {
   return (
     <Container>
       <Label>your name</Label>
-      {editingAvatar ? (
-        <SetParticipantAvatarMutation participant={participant}>
-          {({ setParticipantAvatar }) => (
-            <PhotoBooth
-              onPictureReady={({ data }) => {
-                if (data) {
-                  setParticipantAvatar(data)
-                  setEditingAvatar(false)
-                }
-              }}
-            />
-          )}
-        </SetParticipantAvatarMutation>
-      ) : (
-        <StyledAvatar size="6rem">
-          {participant.avatar ? (
-            <Img src={participant.avatar} alt={participant.name} />
-          ) : (
-            participant.name[0] || '?'
-          )}
-          <EditButton onClick={() => setEditingAvatar(true)}>Edit</EditButton>
-        </StyledAvatar>
-      )}
+      <StyledAvatar size="4rem">
+        {editingAvatar ? (
+          <SetParticipantAvatarMutation participant={participant}>
+            {({ setParticipantAvatar }) => (
+              <PhotoBooth
+                onPictureReady={({ data }) => {
+                  if (data) {
+                    setParticipantAvatar(data)
+                    setEditingAvatar(false)
+                  }
+                }}
+              />
+            )}
+          </SetParticipantAvatarMutation>
+        ) : (
+          <Fragment>
+            {participant.avatar ? (
+              <Img src={participant.avatar} alt={participant.name} />
+            ) : (
+              participant.name[0] || '?'
+            )}
+            <EditButton onClick={() => setEditingAvatar(true)}>Edit</EditButton>
+          </Fragment>
+        )}
+      </StyledAvatar>
       <SetParticipantNameMutation participant={participant}>
         {({ setParticipantName }) => (
           <Input

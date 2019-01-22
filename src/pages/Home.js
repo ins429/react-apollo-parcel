@@ -26,22 +26,15 @@ const Input = styled.input`
 
 const Button = styled.button`
   border: none;
+  color: #fff;
   background: #000;
   display: block;
   margin: 0.5rem auto;
   padding: 0.25rem 0.5rem;
   border-radius: 2rem;
-
-  a {
-    color: #fff;
-    text-decoration: none;
-    &:active {
-      color: #fff;
-    }
-  }
 `
 
-const Home = () => (
+const Home = ({ history }) => (
   <Query
     query={gql`
       query QueryParticipant {
@@ -75,7 +68,9 @@ const Home = () => (
             `}
           >
             {setChannel => (
-              <ChannelForm>
+              <ChannelForm
+                onSubmit={() => history.push(`/${local.channel.trim()}`)}
+              >
                 <Input
                   type="text"
                   value={local.channel}
@@ -83,9 +78,7 @@ const Home = () => (
                     setChannel({ variables: { value } })
                   }
                 />
-                <Button>
-                  <Link to={`/${local.channel.trim()}`}>join</Link>
-                </Button>
+                <Button>join</Button>
               </ChannelForm>
             )}
           </Mutation>
