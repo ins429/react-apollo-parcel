@@ -79,7 +79,7 @@ const CamNotFound = styled.div`
 
 const Participant = ({ participant }) => {
   const [editingAvatar, setEditingAvatar] = useState(false)
-  const { loading, error, data } = useUserMedia({ video: true })
+  const { loading, error, data } = useUserMedia({ audio: true })
 
   return (
     <Container>
@@ -94,7 +94,7 @@ const Participant = ({ participant }) => {
                 <CamNotFound>camera not found</CamNotFound>
               ) : (
                 <PhotoBooth
-                  camera={camera}
+                  stream={data}
                   onPictureReady={({ data }) => {
                     if (data) {
                       setParticipantAvatar(data)

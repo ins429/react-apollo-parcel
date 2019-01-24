@@ -51,20 +51,9 @@ class PhotoBooth extends Component {
   video = createRef()
   canvas = createRef()
 
-  async componentDidMount() {
-    let stream
+  componentDidMount() {
+    const { stream } = this.props
 
-    try {
-      stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: false
-      })
-    } catch (err) {
-      console.log('An error occurred! ' + err)
-      this.setState({ error: true })
-    }
-
-    this.setState({ loading: false })
     if (stream !== undefined) {
       this.video.current.srcObject = stream
       this.video.current.play()
@@ -137,7 +126,7 @@ class PhotoBooth extends Component {
         <DisplayContainer>
           <Cam
             width={this.state.width}
-            ref={this.props.camera}
+            ref={this.video}
             hide={!!this.state.src}
           >
             Video stream not available.
