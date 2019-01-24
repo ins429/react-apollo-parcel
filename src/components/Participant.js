@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useContext, useState } from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
@@ -8,6 +8,7 @@ import Avatar from './Avatar'
 import PhotoBooth from './PhotoBooth'
 import SetParticipantNameMutation from './mutations/SetParticipantName'
 import SetParticipantAvatarMutation from './mutations/SetParticipantAvatar'
+import useUserMedia from '../utils/useUserMedia'
 
 const EditButton = styled.button`
   position: absolute;
@@ -65,8 +66,20 @@ const Img = styled.img`
   width: 100%;
 `
 
+const CamNotFound = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 1rem;
+  border: 1px dotted #333;
+`
+
 const Participant = ({ participant }) => {
   const [editingAvatar, setEditingAvatar] = useState(false)
+  const { loading, error, data } = useUserMedia({ video: true })
 
   return (
     <Container>
@@ -74,16 +87,23 @@ const Participant = ({ participant }) => {
       <StyledAvatar size="4rem">
         {editingAvatar ? (
           <SetParticipantAvatarMutation participant={participant}>
-            {({ setParticipantAvatar }) => (
-              <PhotoBooth
-                onPictureReady={({ data }) => {
-                  if (data) {
-                    setParticipantAvatar(data)
-                    setEditingAvatar(false)
-                  }
-                }}
-              />
-            )}
+            {({ setParticipantAvatar }) =>
+              loading ? (
+                <Loader />
+              ) : error ? (
+                <CamNotFound>camera not found</CamNotFound>
+              ) : (
+                <PhotoBooth
+                  camera={camera}
+                  onPictureReady={({ data }) => {
+                    if (data) {
+                      setParticipantAvatar(data)
+                      setEditingAvatar(false)
+                    }
+                  }}
+                />
+              )
+            }
           </SetParticipantAvatarMutation>
         ) : (
           <Fragment>

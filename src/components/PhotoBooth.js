@@ -1,6 +1,5 @@
 import React, { Component, createRef } from 'react'
 import styled from 'styled-components'
-import Loader from './Loader'
 
 const Container = styled.div`
   padding: 0.5rem;
@@ -29,17 +28,6 @@ const ButtonContainer = styled.div`
     margin-bottom: 1rem;
     border-radius: 1rem;
   }
-`
-
-const CamNotFound = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 2rem;
-  min-height: 2rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 1rem;
-  border: 1px dotted #333;
 `
 
 const Cam = styled.video`
@@ -146,31 +134,23 @@ class PhotoBooth extends Component {
   render() {
     return (
       <Container>
-        {this.state.loading ? (
-          <Loader />
-        ) : this.state.error ? (
-          <CamNotFound>camera not found</CamNotFound>
-        ) : (
-          <DisplayContainer>
-            <Cam
-              width={this.state.width}
-              ref={this.video}
-              hide={!!this.state.src}
-            >
-              Video stream not available.
-            </Cam>
-            <Canvas ref={this.canvas} hide={!this.state.src} />
-            <ButtonContainer>
-              {this.state.src ? (
-                <button onClick={this.clearPhoto.bind(this)}>Retake</button>
-              ) : (
-                <button onClick={this.takePicture.bind(this)}>
-                  Take photo
-                </button>
-              )}
-            </ButtonContainer>
-          </DisplayContainer>
-        )}
+        <DisplayContainer>
+          <Cam
+            width={this.state.width}
+            ref={this.props.camera}
+            hide={!!this.state.src}
+          >
+            Video stream not available.
+          </Cam>
+          <Canvas ref={this.canvas} hide={!this.state.src} />
+          <ButtonContainer>
+            {this.state.src ? (
+              <button onClick={this.clearPhoto.bind(this)}>Retake</button>
+            ) : (
+              <button onClick={this.takePicture.bind(this)}>Take photo</button>
+            )}
+          </ButtonContainer>
+        </DisplayContainer>
       </Container>
     )
   }
