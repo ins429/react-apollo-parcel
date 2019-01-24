@@ -1,11 +1,7 @@
 import React from 'react'
+import gql from 'graphql-tag'
 import { MockedProvider } from 'react-apollo/test-utils'
-import {
-  render,
-  fireEvent,
-  cleanup,
-  waitForElement
-} from 'react-testing-library'
+import { render, waitForElement } from 'react-testing-library'
 import App from './App'
 
 // this adds custom jest matchers from jest-dom
@@ -22,7 +18,24 @@ const renderWithMockProvider = (children, opts = {}) =>
   )
 
 test('renders', () => {
-  const { getByText } = renderWithMockProvider(<App />)
+  const { getByText } = renderWithMockProvider(<App />, {
+    mocks: [
+      {
+        request: {
+          query: gql`
+            {
+              session
+            }
+          `
+        },
+        result: {
+          data: {
+            session: 'foo'
+          }
+        }
+      }
+    ]
+  })
 
   expect(getByText('loading...')).toBeInTheDocument()
 })

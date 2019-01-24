@@ -52,5 +52,8 @@
   },
   "browserslist": [
     "since 2017-06"
-  ]
+  ],
+  "jest": {
+    "setupTestFrameworkScriptFile": "./test/setup.js"
+  }
 }

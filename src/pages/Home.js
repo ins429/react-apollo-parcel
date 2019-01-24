@@ -34,25 +34,27 @@ const Button = styled.button`
   border-radius: 2rem;
 `
 
-const Home = ({ history }) => (
-  <Query
-    query={gql`
-      query QueryParticipant {
-        participant {
-          id
-          name
-          avatar
-          lastActiveAt
-          ...Participant_participant
-        }
+export const QUERY_PARTICIPANT = gql`
+  query QueryParticipant {
+    participant {
+      id
+      name
+      avatar
+      lastActiveAt
 
-        local @client {
-          channel
-        }
-      }
-      ${Participant_participant}
-    `}
-  >
+      ...Participant_participant
+    }
+
+    local @client {
+      channel
+    }
+  }
+
+  ${Participant_participant}
+`
+
+const Home = ({ history }) => (
+  <Query query={QUERY_PARTICIPANT}>
     {({ data: { local, participant }, loading }) =>
       loading ? (
         <div>loading...</div>
