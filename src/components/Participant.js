@@ -1,6 +1,5 @@
 import React, { Fragment, useContext, useState } from 'react'
 import styled from 'styled-components'
-import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
 import { Link } from 'react-router-dom'
 import Loader from './Loader'

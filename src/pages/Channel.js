@@ -21,6 +21,31 @@ const Container = styled.div`
   height: 100vh;
 `
 
+const QUERY_CHANNEL = gql`
+  query Channel($channelName: String!) {
+    channel(channelName: $channelName) {
+      id
+      messages {
+        id
+        message
+        createdAt
+
+        participant {
+          name
+
+          ...Message_participant
+        }
+      }
+    }
+
+    local @client {
+      message
+    }
+  }
+
+  ${Message_participant}
+`
+
 const Channel = ({
   match: {
     params: { channelName }
@@ -29,30 +54,7 @@ const Channel = ({
   <JoinChannelOnMount channelName={channelName}>
     {() => (
       <Query
-        query={gql`
-          query Channel($channelName: String!) {
-            channel(channelName: $channelName) {
-              id
-              messages {
-                id
-                message
-                createdAt
-
-                participant {
-                  name
-
-                  ...Message_participant
-                }
-              }
-            }
-
-            local @client {
-              message
-            }
-          }
-
-          ${Message_participant}
-        `}
+        query={QUERY_CHANNEL}
         variables={{ channelName }}
         pollInterval={5000}
       >

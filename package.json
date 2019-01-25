@@ -54,6 +54,6 @@
     "since 2017-06"
   ],
   "jest": {
-    "setupTestFrameworkScriptFile": "./test/setup.js"
+    "setupTestFrameworkScriptFile": "./test/testSetup.js"
   }
 }

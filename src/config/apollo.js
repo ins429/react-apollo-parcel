@@ -53,7 +53,7 @@ const httpLink = ApolloLink.split(
   })
 )
 
-const stateLink = withClientState({
+export const stateLink = withClientState({
   cache,
   ...clientState
 })
